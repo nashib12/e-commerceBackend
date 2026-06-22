@@ -7,23 +7,9 @@ use App\Http\Requests\UpdateProductRequset;
 use App\Http\Resources\ProductResource;
 use App\Models\Products;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
-    protected function generateSlug(string $title) : string {
-        $slug = Str::slug($title);
-        $original = $slug;
-        $count = 1;
-
-        while(Products::where('slug', $slug)->exists()) {
-            $slug = $original.'-'.$count;
-            $count++;
-        }
-
-        return $slug;
-    }
-
     public function index() {
         return response()->json([
             'message' => 'Products data fetched successfully.',
@@ -33,7 +19,7 @@ class ProductController extends Controller
 
     public function show() {
         $data = Products::select('id', 'name', 'base_price', 'sale_price', 'category_id', 'slug', 'is_featured')->where('is_active', true)
-            ->with(['primaryImage:product_id,id,url', 'categories',])->paginate(5);
+            ->with(['primaryImage:product_id,id,url', 'categories',])->paginate(8);
         return response()->json([
             'data' => $data,
         ], 200);
@@ -58,8 +44,6 @@ class ProductController extends Controller
 
     public function create(StoreProductRequest $request){
         $validated = $request->validated();
-
-        $validated['slug'] = $this->generateSlug($validated['name']);
 
         Products::create($validated);
 

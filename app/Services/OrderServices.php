@@ -45,7 +45,8 @@ class OrderServices {
                 }
             }
             if (!empty($data['coupon_code'])) {
-                $discount = $this->validateCoupon($data['coupon'], $total);
+                $discount = $this->validateCoupon($data['coupon_code'], $total);
+                Coupon::where('code', $data['coupon_code'])->first()->increment('used_count', 1);
             }
 
             $shippingFee = $this->getShippingFee($total);
@@ -73,7 +74,7 @@ class OrderServices {
         });
     }
 
-    private function validateCoupon( string $data, float $total) : float {
+    private function validateCoupon( string $data, float $total) {
         $coupon = Coupon::where('code', $data)->first();
 
         if(!$coupon) {
@@ -105,9 +106,6 @@ class OrderServices {
                 'coupon' => "Minumum order amount should be $ {$coupon->min_order_amount}."
             ]);
         }
-
-        $coupon->increment('used_count', 1);
-
         return $coupon->type === 'percentage' ? round($coupon->value /  100 * $total, 2) : round($coupon->value, 2);
     }
 

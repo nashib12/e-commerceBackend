@@ -7,21 +7,9 @@ use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Categories;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class CategoryController extends Controller
-{
-    protected function generateSlug(string $title) : string {
-        $slug = Str::slug($title);
-        $original = $slug;
-        $count = 1;
-
-        while(Categories::where('slug', $slug)->exists()){
-            $slug = $original.'-'.$count;
-            $count++;
-        }
-        return $slug;
-    }  
+{ 
     
     public function apiIndex() {
         $data = Categories::whereNull('parent_id')->where('is_active', true)->with(['children' => function ($query) {
@@ -39,11 +27,15 @@ class CategoryController extends Controller
             'data' => $data,
         ], 200);
     }
+    public function show() {
+        return response()->json([
+            'message' => 'Category fetched successfully.',
+            'data' => Categories::whereNull('parent_id')->with('children')->get(),
+        ], 200);
+    }
 
     public function create(StoreCategoryRequest $request){
         $validated = $request->validated();
-
-        $validated['slug'] = $this->generateSlug($validated['title']);
 
         if($request->hasFile('image')){
             $validated['image'] = $request->file('image')->store('categories', 'public');

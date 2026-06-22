@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class Categories extends Model
 {
@@ -23,7 +24,7 @@ class Categories extends Model
     } 
 
     public function children(): HasMany {
-        return $this->hasMany(Categories::class, 'parent_id')->with(['children' => function ($query) {
+        return $this->hasMany(Categories::class, 'parent_id')->with(['parent','children' => function ($query) {
             $query->where('is_active', true);
         }]);
     }
@@ -38,13 +39,22 @@ class Categories extends Model
         static::creating(function ($categories) {
             $max = Categories::where('parent_id', $categories->parent_id)->max('sort_order');
             $categories->sort_order = $max ? $max + 1 : 1;
+            $categories->slug = static::generateUniqueSlug($categories->title);
         });
+
+        static::updating(function ($categories) {
+            if($categories->isDirty('title')) {
+                $categories->slug =  static::generateUniqueSlug($categories->title, $categories->id);
+            }
+        }); 
 
         static::deleting(function ($categories) {
             if($categories->image){
                 Storage::disk('public')->delete($categories->image);
             }
         });
+
+
     } 
 
     public function product(): HasMany {
@@ -54,4 +64,16 @@ class Categories extends Model
     protected $casts = [
         'is_active' => 'boolean',
     ];
+
+    protected static function generateUniqueSlug(string $title, ?int $ignoreId = null): string {
+        $base = Str::slug($title);
+        $slug = $base;
+        $count = 1;
+        while( static::where('slug', $slug)->when($ignoreId, fn($q) => $q->where('id', '!=', $ignoreId))->exists()) {
+            $slug = "{$base}-{$count}";
+            $count++;
+        }
+
+        return $slug;
+    }
 }

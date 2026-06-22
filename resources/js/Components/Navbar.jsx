@@ -5,6 +5,10 @@ import ProfileImage from '../../assests/images/pr1.jpg'
 import EditIcon from '../../assests/icon/edit.png'
 import UserIcon from '../../assests/icon/user.png'
 import LogoutIcon from '../../assests/icon/exit.png'
+import { route } from 'ziggy-js'
+import { useForm } from 'react-hook-form'
+import axios from 'axios'
+import toast from 'react-hot-toast'
 
 const Navbar = () => {
   return (
@@ -34,6 +38,12 @@ export default Navbar
 
 const Dropdown = () => {
      const [ dropdown, setDropdown ] = useState(false);
+     const { handleSubmit } = useForm();
+     const onSubmit =  async () => {
+        await axios.post(route('logout'));
+        toast.success("Successfully logout.");
+        setDropdown(false);
+     }
     return (
         <div className='relative'>
             <div onClick={() => setDropdown(curr => !curr)} className='relative cursor-pointer'>
@@ -50,9 +60,13 @@ const Dropdown = () => {
                         <img src={EditIcon} alt="view profile button icon" className='h-5 w-5 object-contain' />
                         <span className='tracking-wide '>Change Password</span>
                     </li>
-                    <li onClick={() => setDropdown(false)} className='flex items-center gap-3 cursor-pointer px-5 py-3 transition-colors duration-300 ease-in-out hover:bg-gray-100'>
-                        <img src={LogoutIcon} alt="view profile button icon" className='h-5 w-5 object-contain' />
-                        <span className='tracking-wide'>Log out</span>
+                    <li className='px-5 py-3 transition-colors duration-300 ease-in-out hover:bg-gray-100'>
+                        <form onSubmit={handleSubmit(onSubmit)}>
+                            <button type='submit' className='flex items-center gap-3 cursor-pointer'>
+                                <img src={LogoutIcon} alt="view profile button icon" className='h-5 w-5 object-contain' />
+                                Log Out
+                            </button>
+                        </form>
                     </li>
                 </ul>
             }

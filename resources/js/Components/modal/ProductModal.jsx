@@ -34,9 +34,9 @@ const ProductModal = () => {
         if (!updateData) return;
 
         const { parent_category_id, chld_category_id, category_id } = resolveParentChain(category, updateData.category_id);
-
-        setChildCategory(category.filter(curr => curr.parent_id === parent_category_id));
-        setSubCategory(category.filter(curr => curr.parent_id === chld_category_id));
+        
+        setChildCategory(category.filter(item => item.parent_id === parent_category_id));
+        setSubCategory(category.filter(item => item.parent_id === chld_category_id));
 
         setValue('parent_category_id', parent_category_id);
         setValue('chld_category_id', chld_category_id);
@@ -56,7 +56,6 @@ const ProductModal = () => {
         }
 
         const children = category.filter((item) => item.parent_id === Number(selectedParent));
-        console.log(typeof Number(selectedParent));
         setChildCategory(children);
         setSubCategory([]);
         setValue('chld_category_id', '');
@@ -159,9 +158,9 @@ const ProductModal = () => {
                         <label htmlFor="child_category_id" className='block mb-2.5 text-lg font-semibold'>Select child category <span className='text-red-600'>*</span></label>
                         <select id="child_category_id" {...register('chld_category_id', { required: "Select child category."})} className={`h-11 w-full outline-none border rounded-md px-4 ${errors.chld_category_id ? 'border-red-600' : 'border-black'}`} >
                             <option value="" hidden>-- Select a option --</option>
-                            { childCategory.map(item => (
-                                <option key={`cat-chi${item.id}`} value={item.id}>{ item.title }</option>
-                            ))}
+                            { childCategory.map(item => {
+                               return <option key={`cat-chi${item.id}`} value={item.id}>{ item.title }</option>
+                            })}
                         </select>
                         { errors.chld_category_id && <p className='text-sm mt-2.5 text-red-600'>* {errors.chld_category_id.message}</p>}
                     </div>

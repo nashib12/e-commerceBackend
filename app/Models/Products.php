@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class Products extends Model
 {
@@ -59,5 +60,28 @@ class Products extends Model
             return null;
         }
         return ($this->base_price - ($this->sale_price / 100 * $this->base_price));
+    }
+
+    protected static function booted() {
+        static::creating(function ($products) {
+            $products->slug = static::generateUniqueSlug($products->name);
+        });
+
+        static::updating(function ($products) {
+            if ($products->isDirty('name')) {
+                $products->slug = static::generateUniqueSlug($products->name, $products->id);
+            }
+        });
+    }
+    protected static function generateUniqueSlug(string $title, ?int $ignoreId = null): string {
+        $base = Str::slug($title);
+        $slug = $base;
+        $count = 1;
+        while( static::where('slug', $slug)->when($ignoreId, fn($q) => $q->where('id', '!=', $ignoreId))->exists()) {
+            $slug = "{$base}-{$count}";
+            $count++;
+        }
+
+        return $slug;
     }
 }

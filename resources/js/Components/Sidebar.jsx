@@ -23,17 +23,21 @@ const Sidebar = () => {
             </div>
             <h2 className='font-semibold text-xl tracking-wide'>Dashboard</h2>
         </div>
-        <div className='flex items-center gap-3 cursor-pointer transition-colors duration-300 ease-in-out hover:bg-gray-300 px-4 py-4'>
-            <img src={DashboardIcon} alt="dashboard icon" className='h-5 w-5 object-contain' />
-            <h3 className='text-lg tracking-wide'>Overview</h3>
-        </div>
+        <Link href={'/'}>
+            <div className='flex items-center gap-3 cursor-pointer transition-colors duration-300 ease-in-out hover:bg-gray-300 px-4 py-4'>
+                <img src={DashboardIcon} alt="dashboard icon" className='h-5 w-5 object-contain' />
+                <h3 className='text-lg tracking-wide'>Overview</h3>
+            </div>
+        </Link>
         <div className='px-4 py-4'>
             <h3 className='font-semibold tracking-wider uppercase'>Store</h3>
         </div>
-        <div className='flex items-center gap-3 cursor-pointer transition-colors duration-300 ease-in-out hover:bg-gray-300 px-4 py-2'>
-            <img src={OrderIcon} alt="dashboard icon" className='h-5 w-5 object-contain' />
-            <h3 className='text-lg tracking-wide'>Orders</h3>
-        </div>
+        <Link href={'/order-details'}>
+            <div className='flex items-center gap-3 cursor-pointer transition-colors duration-300 ease-in-out hover:bg-gray-300 px-4 py-2'>
+                <img src={OrderIcon} alt="dashboard icon" className='h-5 w-5 object-contain' />
+                <h3 className='text-lg tracking-wide'>Orders</h3>
+            </div>
+        </Link>
         <Link href={'/product-page'}>
             <div className='flex items-center gap-3 cursor-pointer transition-colors duration-300 ease-in-out hover:bg-gray-300 px-4 py-2'>
                 <img src={ProductIcon} alt="dashboard icon" className='h-5 w-5 object-contain' />

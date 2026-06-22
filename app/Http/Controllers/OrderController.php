@@ -16,7 +16,7 @@ class OrderController extends Controller
     public function index() {
         return response()->json([
             'message' => 'Order detail fetched successfully',
-            'data' => Orders::all(),
+            'data' => Orders::with('orderItems')->get(),
         ], 200);
     }
 

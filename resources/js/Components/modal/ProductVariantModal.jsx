@@ -148,7 +148,7 @@ const ProductVariantModal = () => {
                       ))}
                       </div>
                       {options && (
-                        <div className='ml-1.5 w-1/2 bg-white rounded-md border flex flex-col overflow-hidden self-start h-fit'>
+                        <div className='ml-1.5 w-1/2 bg-white rounded-md border flex flex-col self-start h-30 overflow-y-scroll'>
                           {  attribute.find(item => item.id === options)?.attribute_value.map(i => {
                             const selected = selectedAttribute.find(curr => curr.id === i.id);
                             return (<div type='button' className={`cursor-pointer py-2 px-4 ${ selected ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-100'} flex items-center justify-between`}

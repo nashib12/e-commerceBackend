@@ -17,24 +17,17 @@ use Inertia\Response;
 class RegisteredUserController extends Controller
 {
     /**
-     * Display the registration view.
-     */
-    public function create(): Response
-    {
-        return Inertia::render('Auth/Register');
-    }
-
-    /**
      * Handle an incoming registration request.
      *
      * @throws ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function create(Request $request): RedirectResponse
     {
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'terms' => 'accepted'
         ]);
 
         $user = User::create([
