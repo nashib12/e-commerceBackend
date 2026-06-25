@@ -50,14 +50,14 @@ const Sidebar = () => {
             <h3 className='text-lg tracking-wide'>Categories</h3>
         </div>
         </Link>
-        <div className='flex items-center gap-3 cursor-pointer transition-colors duration-300 ease-in-out hover:bg-gray-300 px-4 py-2'>
+        {/* <div className='flex items-center gap-3 cursor-pointer transition-colors duration-300 ease-in-out hover:bg-gray-300 px-4 py-2'>
             <img src={CustomerIcon} alt="dashboard icon" className='h-5 w-5 object-contain' />
             <h3 className='text-lg tracking-wide'>Customers</h3>
         </div>
         <div className='flex items-center gap-3 cursor-pointer transition-colors duration-300 ease-in-out hover:bg-gray-300 px-4 py-2'>
             <img src={ReviewIcon} alt="dashboard icon" className='h-5 w-5 object-contain' />
             <h3 className='text-lg tracking-wide'>Reviews</h3>
-        </div>
+        </div> */}
          <div className='px-4 py-4'>
             <h3 className='font-semibold tracking-wider uppercase'>Operations</h3>
         </div>
@@ -85,10 +85,10 @@ const Sidebar = () => {
                 <h3 className='text-lg tracking-wide'>Shipping Fee</h3>
             </div>
         </Link>
-        <div className='flex items-center gap-3 cursor-pointer transition-colors duration-300 ease-in-out hover:bg-gray-300 px-4 py-2'>
+        {/* <div className='flex items-center gap-3 cursor-pointer transition-colors duration-300 ease-in-out hover:bg-gray-300 px-4 py-2'>
             <img src={SettingIcon} alt="dashboard icon" className='h-5 w-5 object-contain' />
             <h3 className='text-lg tracking-wide'>Settings</h3>
-        </div>
+        </div> */}
 
     </aside>
   )

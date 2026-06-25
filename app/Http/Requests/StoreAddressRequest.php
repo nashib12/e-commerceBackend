@@ -14,6 +14,9 @@ class StoreAddressRequest extends FormRequest
      */
     public function authorize(): bool
     {
+        if(! $this->user()) {
+            false;
+        }
         return true;
     }
 
@@ -26,13 +29,12 @@ class StoreAddressRequest extends FormRequest
     {
         return [
             'label' => 'required|string|max:255',
-            'full_name' => 'required|string|max:255',
             'phone' => 'required|string',
             'address_line' => 'required|string|max:255',
             'city' => 'required|string|max:255',
             'state' => 'required|string|max:255',
             'postal_code' => 'nullable|string|max:20',
-            'is_default' => 'required|boolean',
+            'is_default' => 'nullable|boolean',
         ];
     }
 
@@ -50,16 +52,15 @@ class StoreAddressRequest extends FormRequest
             'state.required' => 'State name is required.',
             'state.max' => 'State cannot exceed 255 characters.',
             'postal_code.max' => 'Postal code cannot exceed 20 characters.',
-            'is_default.required' => 'Default value is required',
             'is_default.boolean' => 'Default type only allows boolean value.',
         ];
     }
-    protected function failedValidation(Validator $validator) : void {
-        throw new HttpResponseException(
-            response()->json([
-                'message' => 'Validation failed.',
-                'errors' => $validator->errors(),
-            ], 422)
-        );
-    }
+    // protected function failedValidation(Validator $validator) : void {
+    //     throw new HttpResponseException(
+    //         response()->json([
+    //             'message' => 'Validation failed.',
+    //             'errors' => $validator->errors(),
+    //         ], 422)
+    //     );
+    // }
 }

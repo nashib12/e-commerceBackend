@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class OrderServices {
-    public function createOrder (array $data) {
-        return DB::transaction(function () use($data) {
+    public function createOrder (array $data, int $id) {
+        return DB::transaction(function () use($data, $id) {
             $total = 0;
             $orderItems = [];
             $discount = 0;
@@ -54,6 +54,7 @@ class OrderServices {
             $total = $total - $discount + $shippingFee;
 
             $order = Orders::create([
+                'user_id' => $id,
                 'coupon_code' => $data['coupon_code'],
                 'status' => 'pending',
                 'subtotal' => $subTotal,

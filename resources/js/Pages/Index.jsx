@@ -1,4 +1,4 @@
-import LineChart from '@/Components/charts/LineChart';
+import LineChart from '@/Components/auth/charts/LineChart';
 import DashboardLayout from '@/Layouts/DashboardLayout';
 import React, { useState } from 'react';
 import TagIcon from '../../assests/icon/tag.png';

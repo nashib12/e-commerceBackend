@@ -1,8 +1,10 @@
 <?php
 
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Http\Request;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -17,11 +19,14 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\HandleInertiaRequests::class,
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ]);
-
+        $middleware->statefulApi();
         //
     })
-    ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->shouldRenderJsonWhen(
-            fn (Request $request) => $request->is('api/*'),
-        );
+    ->withExceptions( function (Exceptions $exceptions) {
+        $exceptions->render(function ( ThrottleRequestsException $e, Request $request) {
+                return response()->json([
+                'message'     => 'Too many requests. Please slow down.',
+                'retry_after' => $e->getHeaders()['Retry-After'] ?? null,
+            ], 429);
+        });
     })->create();

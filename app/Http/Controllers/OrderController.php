@@ -21,7 +21,9 @@ class OrderController extends Controller
     }
 
     public function create(StoreOrderRequest $request) {
-        $data = $this->orderServices->createOrder($request->validated());
+        $validated = $request->validated();
+        $id = $request->user()->id;
+        $data = $this->orderServices->createOrder($validated, $id);
         return response()->json([
             'message' => 'Order created successfully',
             'data' => $data,
@@ -50,6 +52,16 @@ class OrderController extends Controller
 
         return response()->json([
             'message' => 'Product status validated successfully.'
+        ], 200);
+    }
+
+    public function show() {
+        $user = auth()->user();
+        $order = Orders::where('user_id', $user->id)->with('orderItems')->get();
+
+        return response()->json([
+            'message' => 'Order fetched successfully',
+            'data' => $order,
         ], 200);
     }
 }

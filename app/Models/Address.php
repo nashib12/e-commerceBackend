@@ -26,7 +26,11 @@ class Address extends Model
 
     public function isDefault() : Attribute {
         return Attribute::make(
-            set: fn ($value) => $value === true ? true : null,
+            set: fn ($value) => filter_var($value, FILTER_VALIDATE_BOOLEAN ) ? true : null,
         );
     }
+
+    protected $casts = [
+        'is_default' => 'boolean',
+    ];
 }

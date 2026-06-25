@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { route } from 'ziggy-js';
+import { router } from '@inertiajs/react';
 
 const UserLoginForm = () => {
     const [ passwordType, setPasswordType ] = useState("password");
@@ -19,8 +20,9 @@ const UserLoginForm = () => {
         try {
             const response = await axios.post(route('login'), data);
             if (response.status === 200) {
-                toast.success("Successfully logged in.");
+                toast.success(response.data.message);
                 reset();
+                router.visit(route('dashboard'));
             }
         } catch (error) {
             if(error.response?.status === 422) {

@@ -15,35 +15,36 @@ use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Index');
-})->name('dashboard');
-
-Route::get('/categories', function () {
-    return Inertia::render('Categories');
-});
-
-Route::get('/coupon-page', function () {
-    return Inertia::render('Coupon');
-});
-
-Route::get('/product-page', function () {
-    return Inertia::render('Products');
-});
-
-Route::get('/product-attrbiute', function () {
-    return Inertia::render('Attributes');
-});
-
-Route::get('/product-inventory', function () {
-    return Inertia::render('Inventory');
-});
-Route::get('shipping-fee-page', function () {
-    return Inertia::render('ShippingFee');
-});
-
-Route::get('/order-details', function () {
-    return Inertia::render('Order');
+Route::middleware('auth')->group(function () {
+    Route::get('/', function () {
+        return Inertia::render('Index');
+    })->name('dashboard');
+    Route::get('/categories', function () {
+        return Inertia::render('Categories');
+    });
+    Route::get('/coupon-page', function () {
+        return Inertia::render('Coupon');
+    });
+    
+    Route::get('/product-page', function () {
+        return Inertia::render('Products');
+    });
+    
+    Route::get('/product-attrbiute', function () {
+        return Inertia::render('Attributes');
+    });
+    
+    Route::get('/product-inventory', function () {
+        return Inertia::render('Inventory');
+    });
+    Route::get('shipping-fee-page', function () {
+        return Inertia::render('ShippingFee');
+    });
+    
+    Route::get('/order-details', function () {
+        return Inertia::render('Order');
+    });
+    
 });
 
 Route::get('/registration', function() {
@@ -111,17 +112,7 @@ Route::middleware('auth')->prefix('/coupons')->controller(CouponController::clas
     Route::post('/checkStatus', 'checkStatus')->name('coupon.checkStatus');
 });
 
-Route::middleware('auth')->prefix('/address')->controller(AddressController::class)->group(function() {
-    Route::get('/', 'index')->name('address.index');
-    Route::post('/store', 'create')->name('address.create');
-    Route::put('/{address}/update', 'update')->name('address.update');
-    Route::delete('/{address}/delete', 'destroy')->name('address.destroy');
-});
-
-Route::middleware('auth')->prefix('/wishlist')->controller(WishlistController::class)->group(function() {
-    Route::post('/store', 'create')->name('wishlist.create');
-    Route::delete('/{wishlist}/delete', 'destroy')->name('wishlist.delete');
-});
+Route::get('/address', [AddressController::class, 'index'])->middleware('auth')->name('address.index');
 
 Route::middleware('auth')->prefix('/review')->controller(ReviewController::class)->group(function () {
     Route::get('/', 'index')->name('review.index');

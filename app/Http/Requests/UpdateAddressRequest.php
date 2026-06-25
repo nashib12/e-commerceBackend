@@ -14,6 +14,9 @@ class UpdateAddressRequest extends FormRequest
      */
     public function authorize(): bool
     {
+        if(!$this->user()){
+            return false;
+        }
         return true;
     }
 
@@ -32,7 +35,7 @@ class UpdateAddressRequest extends FormRequest
             'city' => 'sometimes|string|max:255',
             'state' => 'sometimes|string|max:255',
             'postal_code' => 'nullable|string|max:20',
-            'is_default' => 'sometimes|boolean',
+            'is_default' => 'nullable|boolean',
         ];
     }
 
@@ -48,12 +51,12 @@ class UpdateAddressRequest extends FormRequest
         ];
     }
 
-    protected function failedValidation(Validator $validator) : void {
-        throw new HttpResponseException(
-            response()->json([
-                'message' => 'Validation failed.',
-                'errors' => $validator->errors(),
-            ], 422)
-        );
-    }
+    // protected function failedValidation(Validator $validator) : void {
+    //     throw new HttpResponseException(
+    //         response()->json([
+    //             'message' => 'Validation failed.',
+    //             'errors' => $validator->errors(),
+    //         ], 422)
+    //     );
+    // }
 }

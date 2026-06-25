@@ -8,9 +8,11 @@ use Illuminate\Http\Request;
 
 class FilterController extends Controller
 {
-    public function categoryFilter(int $id) {
-        $data = Products::select('id', 'name', 'base_price', 'sale_price', 'is_featured', 'category_id', 'slug')->where('category_id', $id)->where('is_active', true)
-                ->with(['primaryImage:id,product_id,url', 'categories'])->paginate(5);
+    public function categoryFilter(string $slug) {
+        // $data = Products::select('id', 'name', 'base_price', 'sale_price', 'is_featured', 'category_id', 'slug')
+        //         ->where('slug', $slug)->where('is_active', true)
+        //             ->with(['primaryImage:id,product_id,url', 'categories'])->paginate(5);
+        $data = Categories::where('slug', $slug)->with(['product.primaryImage'])->paginate(5);
 
         return response()->json([
             'message' => 'Product fetched successfully',

@@ -84,4 +84,8 @@ class Products extends Model
 
         return $slug;
     }
+
+    public function wishlists() : HasMany {
+        return $this->hasMany(Wishlist::class, 'product_id');
+    }
 }

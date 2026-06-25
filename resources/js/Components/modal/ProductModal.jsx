@@ -94,13 +94,13 @@ const ProductModal = () => {
 
         try {
             if (updateData) {
-                const response = await axios.post(route('product.update', updateData.id), data);
+                const response = await axios.post(route('product.update', updateData.id), formdata);
                 if (response.status === 200) {
                     handleFormSubmitSuccess(response);
                 }
 
             } else {
-                const response = await axios.post(route('product.create'), data);
+                const response = await axios.post(route('product.create'), formdata);
                 if (response.status === 200){
                     handleFormSubmitSuccess(response);
                 }
