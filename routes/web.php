@@ -11,7 +11,6 @@ use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\ProductVariantController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ShippingFeeController;
-use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -51,7 +50,7 @@ Route::get('/registration', function() {
     return Inertia::render('Auth/Register');
 })->middleware('guest');
 
-Route::middleware('auth')->controller(CategoryController::class)->group( function () {
+Route::middleware(['auth'])->controller(CategoryController::class)->group( function () {
     Route::get('/category', 'index')->name('category.index');
     Route::post('/category/create', 'create')->name('category.create');
     Route::post('/category/{categories}/update', 'update')->name('category.update');

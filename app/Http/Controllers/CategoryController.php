@@ -10,16 +10,6 @@ use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 { 
-    
-    public function apiIndex() {
-        $data = Categories::whereNull('parent_id')->where('is_active', true)->with(['children' => function ($query) {
-            $query->where('is_active', true);
-        }])->get();
-        return response()->json([
-            'message' => 'Category fetched successfully.',
-            'data' => $data,
-        ], 200);
-    }
     public function index() {
         $data = Categories::with(['parent', 'children'])->get();
         return response()->json([
@@ -35,6 +25,8 @@ class CategoryController extends Controller
     }
 
     public function create(StoreCategoryRequest $request){
+        $this->authorize('create', Categories::class);
+
         $validated = $request->validated();
 
         if($request->hasFile('image')){
@@ -50,6 +42,8 @@ class CategoryController extends Controller
     }
 
     public function update(UpdateCategoryRequest $request, Categories $categories){
+        $this->authorize('update', $categories);
+
         $validated = $request->validated();
         if ($request->hasFile('image')){
             if($categories->image !== null ) {
@@ -69,7 +63,8 @@ class CategoryController extends Controller
     }
 
     public function updateStatus(Request $request, Categories $categories){
-        // dd($request->all());
+        $this->authorize('update', $categories);
+    
         $validated = $request->validate([
             'is_active' => ['required', 'boolean'], 
         ]);

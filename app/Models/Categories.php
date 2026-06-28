@@ -76,4 +76,20 @@ class Categories extends Model
 
         return $slug;
     }
+
+    public function allChildren() : HasMany {
+        return $this->hasMany(Categories::class, 'parent_id')->with('allChildren');
+    }
+
+    public function getAllDescendantIds() : array {
+        $ids = [$this->id];
+
+        $this->loadMissing('allChildren');
+
+        foreach ($this->allChildren as $child) {
+            $ids = array_merge($ids, $child->getAllDescendantIds());
+        }
+
+        return $ids;
+    }
 }
